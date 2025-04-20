@@ -1,7 +1,7 @@
 🎭 playwright-extra-install-arguments
 ===
 
-[![Maven Central Version](https://img.shields.io/maven-central/v/com.aldaviva/playwright-extra-install-arguments?logo=apachemaven&label=maven&color=success)](https://central.sonatype.com/artifact/com.aldaviva/playwright-extra-install-arguments)
+[![Maven Central Version](https://img.shields.io/maven-central/v/com.aldaviva.playwright/playwright-extra-install-arguments?logo=apachemaven&label=maven&color=success)](https://central.sonatype.com/artifact/com.aldaviva.playwright/playwright-extra-install-arguments)
 
 *Pass extra custom arguments to Playwright's `cli.js` install command, which lets you install one specific browser instead of all supported browsers.*
 
@@ -18,19 +18,19 @@
 <!-- /MarkdownTOC -->
 
 ## Problem
-Unfortunately, the [Java implementation of Playwright](https://playwright.dev/java/docs/intro) has a limitation in its API that prevents you from choosing which browser you want to download. Every time the Playwright is constructed, it will install the latest versions of all available browsers and their dependencies, which can take a lot of time, bandwidth, and disk space (**926 MB** on 2025-04-20). This is especially important in environments with constrained resources, like virtual machines, containers, Function-as-a-Service executions, or any machines with slow or expensive network connections, slow or small storage, or small transfer quotas.
+Unfortunately, the [Java implementation of Playwright](https://playwright.dev/java/docs/intro) has a limitation in its API that prevents you from choosing which browser you want to download. Every time Playwright is constructed, it will install the latest versions of all available browsers and their dependencies, which can take a lot of time, bandwidth, and disk space (**926 MB** on 2025-04-20). This is especially harmful in environments with constrained resources, like virtual machines, containers, Function-as-a-Service executions, or any machines with slow or expensive network connections, slow or small storage, or small transfer quotas.
 
 The Node.js API does let you [specify exactly which browsers you want to download](https://playwright.dev/docs/browsers#install-browsers) by passing their names to the `install` command:
 ```sh
 node cli.js install chromium
 ```
 
-Unfortunately, despite bundling and calling the Node.js library internally, the Java API does not expose this functionality, and always insists on calling `node cli.js install` without any browser names. This leads to all browers always being installed.
+Sadly, despite bundling and calling the Node.js library internally, the Java API does not in turn expose this functionality to its own consumers, and always insists on calling `node cli.js install` without any browser names. This leads to all browers always being installed. You may have heard of this phenomenon being referred to as an "API cliff."
 
-This issue [has been raised](https://github.com/microsoft/playwright-java/issues/215) to the Playwright maintainers [multiple times](https://github.com/microsoft/playwright-java/issues/388), but they close it each time and offer an insufficient workaround:
-1. install Maven (a development tool) on your production deployment machine
-1. manually fork a new process `mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"`, along with all of the associated process management boilerplate and pitfalls
-1. call `Driver.ensureDriverInstalled(env, false)` before calling `PlaywrightImpl.create(CreateOptions)`
+This issue [has been raised](https://github.com/microsoft/playwright-java/issues/215) to the Playwright maintainers [multiple times](https://github.com/microsoft/playwright-java/issues/388), but they close it as won't-fix each time and offer an insufficient workaround:
+1. Install Maven (a development tool) on your production deployment machine.
+1. Manually fork a new process `mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"`, along with the necessity to deal with all of the associated process and file management boilerplate and pitfalls. How do you know what directory to call that in? What if your application is packaged inside a WAR or EAR?
+1. Call `Driver.ensureDriverInstalled(env, false)` before calling `PlaywrightImpl.create(CreateOptions)`.
 
 ## Solution
 This library offers an alternative which can easily install only your desired browsers, without forking any processes or manual installations.
@@ -46,7 +46,7 @@ Add a dependency on `com.aldaviva:playwright-extra-install-arguments` to your Ma
 
 ```xml
 <dependency>
-    <groupId>com.aldaviva</groupId>
+    <groupId>com.aldaviva.playwright</groupId>
     <artifactId>playwright-extra-install-arguments</artifactId>
     <version><!-- whatever the latest version is--></version>
 </dependency>
@@ -64,10 +64,17 @@ import com.aldaviva.playwright.ExtraInstallArgumentsDriver;
 public class Main {
 
     public static void main(String[] args) {
-        ExtraInstallArgumentsDriver.activate(); // register this Driver class
-        CreateOptions createOptions = ExtraInstallArgumentsDriver.setExtraInstallArguments("chromium --with-deps --only-shell");
+        // register this Driver class with Playwright
+        ExtraInstallArgumentsDriver.activate();
 
+        // specify arguments to pass after `node cli.js install`
+        CreateOptions createOptions = 
+            ExtraInstallArgumentsDriver.setExtraInstallArguments("chromium --with-deps --only-shell");
+
+        // create Playwright instance with options
         try (Playwright playwright = PlaywrightImpl.create(createOptions)) {
+
+            // use Playwright instance
             Browser chromium = playwright.chromium().launch(new LaunchOptions().setHeadless(true));
             BrowserContext browserContext = chromium.newContext();
 
@@ -82,11 +89,19 @@ public class Main {
 ```
 
 - `ExtraInstallArgumentsDriver.activate()` must be called once before any calls to `PlaywrightImpl.create(CreateOptions)`, so that Playwright will use `ExtraInstallArgumentsDriver` instead of the default `DriverJar`.
-- Multiple extra arguments can be separated by a space, comma, or vertical pipe.
-- If you already have an existing `CreateOptions` instance you want to continue using, you may also manually set the extra arguments string as the `PLAYWRIGHT_EXTRA_INSTALL_ARGUMENTS` environment variable (whose name is exposed as the `ExtraInstallArgumentsDriver.EXTRA_INSTALL_ARGUMENTS` constant).
-    ```java
-    CreateOptions createOptions = new CreateOptions().setEnv(new HashMap<>());
-    createOptions.env.put(ExtraInstallArgumentsDriver.EXTRA_INSTALL_ARGUMENTS, "firefox");
-    
-    try (Playwright playwright = PlaywrightImpl.create(createOptions)) {
-    ```
+- Multiple extra arguments can be separated by a space: `chromium --with-deps`
+- If you already have an existing `CreateOptions` instance you want to use, you may either
+    - pass it to `ExtraInstallArgumentsDriver.setExtraInstallArguments(CreateOptions, String)`
+        ```java
+        CreateOptions upstreamOptions;
+        CreateOptions createOptions = ExtraInstallArgumentsDriver.setExtraInstallArguments(upstreamOptions, "webkit");
+
+        try (Playwright playwright = PlaywrightImpl.create(createOptions)) { /*...*/ }
+        ```
+    - manually set the extra arguments string as the `PLAYWRIGHT_EXTRA_INSTALL_ARGUMENTS` environment variable (whose name is exposed as the `ExtraInstallArgumentsDriver.EXTRA_INSTALL_ARGUMENTS` constant).
+        ```java
+        CreateOptions createOptions = new CreateOptions().setEnv(new HashMap<>());
+        createOptions.env.put(ExtraInstallArgumentsDriver.EXTRA_INSTALL_ARGUMENTS, "firefox");
+        
+        try (Playwright playwright = PlaywrightImpl.create(createOptions)) { /*...*/ }
+        ```

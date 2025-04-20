@@ -20,7 +20,7 @@ import java.util.Map;
  * <ul><li>Call {@link ExtraInstallArgumentsDriver#activate()}.</li>
  * <li>Set the {@code playwright.driver.impl} environment variable to {@code com.aldaviva.playwright.ExtraInstallArgumentsDriver} (using {@link System#setProperty(String, String)}).</li></ul>
  * 
- * <li>Specify the extra arguments you want to pass to {@code node cli.js install} by doing one of the following. Multiple arguments are delimited by spaces, commas, or vertical pipes.
+ * <li>Specify the extra arguments you want to pass to {@code node cli.js install} by doing one of the following. Multiple arguments are delimited by spaces.
  * <ul><li>{@code CreateOptions createOptions = ExtraInstallArgumentsDriver.setExtraInstallArguments("chromium --with-deps --no-shell");}</li>
  * <li><code>CreateOptions createOptions = new CreateOptions().setEnv(new HashMap&lt;&gt;());
  * createOptions.env.put(ExtraInstallArgumentsDriver.EXTRA_INSTALL_ARGUMENTS, "chromium --with-deps --no-shell");</code></li></ul></li>
@@ -98,7 +98,12 @@ public class ExtraInstallArgumentsDriver extends DriverJar {
 			createOptions.setEnv(env);
 		}
 
-		env.put(EXTRA_INSTALL_ARGUMENTS, args);
+		if (args != null) {
+			env.put(EXTRA_INSTALL_ARGUMENTS, args);
+		} else {
+			env.remove(EXTRA_INSTALL_ARGUMENTS);
+		}
+
 		return createOptions;
 	}
 
@@ -107,7 +112,7 @@ public class ExtraInstallArgumentsDriver extends DriverJar {
 		final ProcessBuilder processBuilder = super.createProcessBuilder();
 		final List<String> oldCommands = processBuilder.command();
 		final String extraArgs = env.get(EXTRA_INSTALL_ARGUMENTS);
-		final List<String> extraArgList = extraArgs != null ? Arrays.asList(extraArgs.split(",| ")) : null;
+		final List<String> extraArgList = extraArgs != null ? Arrays.asList(extraArgs.split(" ")) : null;
 		return processBuilder.command(new ExtraInstallArgumentsList(oldCommands, extraArgList));
 	}
 
