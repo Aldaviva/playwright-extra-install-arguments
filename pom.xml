@@ -6,6 +6,7 @@
     <version>0.0.1</version>
     <name>Playwright Extra Install Arguments</name>
     <description>Pass extra custom arguments to Playwright's cli.js install command, which lets you install one specific browser instead of all supported browsers.</description>
+    <url>https://github.com/Aldaviva/playwright-extra-install-arguments</url>
     <inceptionYear>2025</inceptionYear>
 
     <properties>
