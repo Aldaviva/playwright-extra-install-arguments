@@ -45,11 +45,11 @@ public class ExtraInstallArgumentsDriver extends DriverJar {
 	 * <p>If you want to pass extra command-line arguments to Playwright's {@code cli.js install}, add them as a space-delimited string to the {@link CreateOptions} environment map with this as the key.</p>
 	 * <p>Alternatively, you may call {@link #setExtraInstallArguments(String)}.</p>
 	 */
-	public static final String EXTRA_INSTALL_ARGUMENTS = "EXTRA_INSTALL_ARGUMENTS";
+	public static final String EXTRA_INSTALL_ARGUMENTS = "PLAYWRIGHT_EXTRA_INSTALL_ARGUMENTS";
 
 	/**
 	 * <p>Required no-arg constructor for {@link DriverJar} which will be called by {@link Driver#newInstance()}.</p>
-	 * <p>Users shouldn't need to construct this directly; instead, call {@link #activate()}, then construct a new {@link PlaywrightImpl}.</p>
+	 * <p>Users shouldn't need to construct this directly; instead, call {@link #activate()}, then call {@link PlaywrightImpl#create(CreateOptions)} with the return value from {@link #setExtraInstallArguments(String)}.</p>
 	 * @throws IOException thrown by {@link DriverJar#DriverJar()}
 	 */
 	public ExtraInstallArgumentsDriver() throws IOException {
@@ -61,6 +61,13 @@ public class ExtraInstallArgumentsDriver extends DriverJar {
 	 */
 	public static void activate() {
 		System.setProperty("playwright.driver.impl", ExtraInstallArgumentsDriver.class.getName());
+	}
+
+	/**
+	 * Unregister this class so Playwright won't use it as the driver implementation for new {@link PlaywrightImpl#create(CreateOptions)} invocations, and they will revert to using the default {@link DriverJar} implementation.
+	 */
+	public static void deactivate() {
+		System.clearProperty("playwright.driver.impl");
 	}
 
 	/**
