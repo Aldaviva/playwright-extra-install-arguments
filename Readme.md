@@ -29,7 +29,7 @@ Sadly, despite bundling and calling the Node.js library internally, the Java API
 
 This issue [has been raised](https://github.com/microsoft/playwright-java/issues/215) to the Playwright maintainers, but they closed it as won't-fix and offered an insufficient workaround:
 1. Install Maven (a development tool) on your production deployment machine.
-1. Manually fork a new process `mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"`, along with the necessity to deal with all of the associated process and file management boilerplate and pitfalls. How do you know what directory to call that in? What if your application is packaged inside a WAR or EAR?
+1. Manually fork a new process `mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"`, along with the necessity to deal with all of the associated process and file management boilerplate and pitfalls. How do you know what directory to call that in? What if your application is packaged inside a WAR or EAR, exploded into loose files in a temporary directory (like Tomcat), or mounted in a virtual filesystem (like JBoss)? In all of these cases, the POM that Maven would need to read is in an unknown directory or archive where Maven can't get to it, even if you knew the correct path.
 1. Call `Driver.ensureDriverInstalled(env, false)` before calling `PlaywrightImpl.create(CreateOptions)`.
 
 ## Solution
