@@ -42,13 +42,13 @@ It is a subclass of Playwright's default `Driver` which lets you specify extra a
 - [Playwright for Java](https://central.sonatype.com/artifact/com.microsoft.playwright/playwright) 1.51 or later
 
 ## Installation
-Add a dependency on `com.aldaviva:playwright-extra-install-arguments` to your Maven-compatible dependency management system. It's published in the Maven Central repository.
+Add a dependency on [`com.aldaviva.playwright:playwright-extra-install-arguments`](https://central.sonatype.com/artifact/com.aldaviva.playwright/playwright-extra-install-arguments/overview) to your Maven-compatible dependency management system.
 
 ```xml
 <dependency>
     <groupId>com.aldaviva.playwright</groupId>
     <artifactId>playwright-extra-install-arguments</artifactId>
-    <version><!-- whatever the latest version is--></version>
+    <version><!-- whichever artifact version you want --></version>
 </dependency>
 ```
 
