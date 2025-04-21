@@ -27,7 +27,7 @@ node cli.js install chromium
 
 Sadly, despite bundling and calling the Node.js library internally, the Java API does not in turn expose this functionality to its own consumers, and always insists on calling `node cli.js install` without any browser names. This leads to all browers always being installed. You may have heard of this phenomenon being referred to as an "API cliff."
 
-This issue [has been raised](https://github.com/microsoft/playwright-java/issues/215) to the Playwright maintainers [multiple times](https://github.com/microsoft/playwright-java/issues/388), but they close it as won't-fix each time and offer an insufficient workaround:
+This issue [has been raised](https://github.com/microsoft/playwright-java/issues/215) to the Playwright maintainers, but they closed it as won't-fix and offered an insufficient workaround:
 1. Install Maven (a development tool) on your production deployment machine.
 1. Manually fork a new process `mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"`, along with the necessity to deal with all of the associated process and file management boilerplate and pitfalls. How do you know what directory to call that in? What if your application is packaged inside a WAR or EAR?
 1. Call `Driver.ensureDriverInstalled(env, false)` before calling `PlaywrightImpl.create(CreateOptions)`.
