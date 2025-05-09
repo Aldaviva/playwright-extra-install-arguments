@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <playwright.version>1.52.0</playwright.version>
     </properties>
-    
+
     <developers>
         <developer>
             <name>Ben Hutchison</name>
@@ -22,7 +22,7 @@
             <timezone>-8</timezone>
         </developer>
     </developers>
-    
+
     <scm>
         <url>https://github.com/Aldaviva/playwright-extra-install-arguments</url>
         <connection>scm:git:git://github.com/Aldaviva/playwright-extra-install-arguments.git</connection>
@@ -51,7 +51,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -64,13 +63,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <profiles>
         <profile>
@@ -120,14 +112,13 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <!-- <autoPublish>true</autoPublish> -->
                         </configuration>
                     </plugin>
                 </plugins>
