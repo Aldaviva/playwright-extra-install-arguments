@@ -73,7 +73,7 @@ public class ExtraInstallArgumentsDriver extends DriverJar {
 	/**
 	 * <p>Specify extra command-line arguments that should be passed to Playwright's {@code node cli.js install} invocation.</p>
 	 * <p>Don't forget to also call {@link #activate()} before {@link PlaywrightImpl#create(CreateOptions)}.</p>
-	 * @param args Zero or more space-delimited command-line arguments (such as browser names) that will be passed to {@code cli.js} immediately after the {@code install} argument, such as {@code chromium}. See <a href="https://playwright.dev/docs/browsers">Playwright › Docs › Guides › Browsers</a> for available arguments.
+	 * @param args Zero or more space-delimited command-line arguments (such as browser names) that will be passed to {@code cli.js} immediately after the {@code install} argument, such as {@code chromium}. See <a href="https://playwright.dev/docs/browsers">Playwright &rsaquo; Docs &rsaquo; Guides &rsaquo; Browsers</a> for available arguments.
 	 * @return A {@link CreateOptions} instance that can be passed to {@link PlaywrightImpl#create(CreateOptions)}.
 	 */
 	public static CreateOptions setExtraInstallArguments(final String args) {
@@ -84,7 +84,7 @@ public class ExtraInstallArgumentsDriver extends DriverJar {
 	 * <p>Specify extra command-line arguments that should be passed to Playwright's {@code node cli.js install} invocation.</p>
 	 * <p>Don't forget to also call {@link #activate()} before {@link PlaywrightImpl#create(CreateOptions)}.</p>
 	 * @param createOptions Environment variable holder that gets passed to {@link PlaywrightImpl#create(CreateOptions)}, or {@code null} to create a new empty instance
-	 * @param args Zero or more space-delimited command-line arguments (such as browser names) that will be passed to {@code cli.js} immediately after the {@code install} argument, such as {@code chromium}. See <a href="https://playwright.dev/docs/browsers">Playwright › Docs › Guides › Browsers</a> for available arguments.
+	 * @param args Zero or more space-delimited command-line arguments (such as browser names) that will be passed to {@code cli.js} immediately after the {@code install} argument, such as {@code chromium}. See <a href="https://playwright.dev/docs/browsers">Playwright &rsaquo; Docs &rsaquo; Guides &rsaquo; Browsers</a> for available arguments.
 	 * @return A {@link CreateOptions} instance that can be passed to {@link PlaywrightImpl#create(CreateOptions)}.
 	 */
 	public static CreateOptions setExtraInstallArguments(CreateOptions createOptions, final String args) {
