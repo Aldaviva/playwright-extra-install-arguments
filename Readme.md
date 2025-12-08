@@ -64,9 +64,7 @@ import com.aldaviva.playwright.ExtraInstallArgumentsDriver;
 public class Main {
 
     public static void main(String[] args) {
-        // register this Driver class with Playwright
-        ExtraInstallArgumentsDriver.activate();
-
+        
         // specify arguments to pass after `node cli.js install`
         CreateOptions createOptions = 
             ExtraInstallArgumentsDriver.setExtraInstallArguments("chromium --with-deps --only-shell");
@@ -88,7 +86,6 @@ public class Main {
 }
 ```
 
-- `ExtraInstallArgumentsDriver.activate()` must be called once before any calls to `PlaywrightImpl.create(CreateOptions)`, so that Playwright will use `ExtraInstallArgumentsDriver` instead of the default `DriverJar`.
 - Multiple extra arguments can be separated by a space: `chromium --with-deps`
 - If you already have an existing `CreateOptions` instance you want to use, you may either
     - pass it to `ExtraInstallArgumentsDriver.setExtraInstallArguments(CreateOptions, String)`
