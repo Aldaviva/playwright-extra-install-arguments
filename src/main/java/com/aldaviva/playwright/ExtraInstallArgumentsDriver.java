@@ -14,7 +14,7 @@ import java.util.Map;
  * <p>Alternative driver for <a href="https://playwright.dev/java/docs/intro">Playwright</a> that lets you specify custom arguments to the {@code install} command which downloads web browsers.</p>
  * <p>This is useful if you only want to spend the time and disk space to install one browser, instead of all of them, or if you want to include or exclude the Chromium headless shell.</p>
  * <p>This is easier than separately executing {@code mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install"} because you don't need to install Maven (a development tool) on your production deployment machines, or worry about forking processes.</p>
-
+ *
  * <h2>Usage</h2>
  * <ol><li>Specify the extra arguments you want to pass to {@code node cli.js install} by doing one of the following. Multiple arguments are delimited by spaces.
  * <ul><li>{@code CreateOptions createOptions = ExtraInstallArgumentsDriver.setExtraInstallArguments("chromium --with-deps --no-shell");}</li>
@@ -25,7 +25,7 @@ import java.util.Map;
  * <pre><code>try (Playwright playwright = PlaywrightImpl.create(createOptions)) {
  *    Browser chromium = playwright.chromium().launch();
  *}</code></pre></li></ol>
- *    
+ * 
  * When the Playwright instance is created, it will automatically download Chromium and its dependencies, but not Firefox or WebKit.
  * 
  * <h3>Example</h3>
