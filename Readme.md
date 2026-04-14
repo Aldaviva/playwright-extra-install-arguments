@@ -39,7 +39,7 @@ It is a subclass of Playwright's default `Driver` which lets you specify extra a
 
 ## Prerequisites
 - [Java 8 runtime or later](https://adoptium.net/temurin/releases/)
-- [Playwright for Java](https://central.sonatype.com/artifact/com.microsoft.playwright/playwright) 1.51 or later
+- [Playwright for Java](https://central.sonatype.com/artifact/com.microsoft.playwright/playwright) 1.52 or later
 
 ## Installation
 Add a dependency on [`com.aldaviva.playwright:playwright-extra-install-arguments`](https://central.sonatype.com/artifact/com.aldaviva.playwright/playwright-extra-install-arguments/overview) to your Maven-compatible dependency management system.
